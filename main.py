@@ -26,12 +26,10 @@ def authenticate():
 
     if not response.json()['errors']:
         print('Success Response Captured.')
-        print(f'Time Finished: {minutes} minutes and {int(seconds):02} seconds')
     else:
         print('Failed Response Captured')
-        print(f'Time Finished: {minutes} minutes and {int(seconds):02} seconds')
 
-    print('\n\n')
+    print(f'Time Finished: (seconds) seconds\n')
 
     # sleep
     time.sleep(5)
