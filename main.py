@@ -1,4 +1,6 @@
-import requests, time
+from datetime import datetime
+
+import os, requests, time
 
 def authenticate():
     authentication_request_body = {}
@@ -14,25 +16,43 @@ def authenticate():
 
     authentication_url = "http://10.10.20.121:8000/authenticate"
 
-    print('Initiating Request.....')
-    
     start_time = time.time()
 
     response = requests.get(authentication_url, params=authentication_request_body)
+    response = response.json()
     
     stop_time = time.time()
 
     minutes, seconds = divmod(stop_time - start_time, 60)
 
-    if not response.json()['errors']:
-        print('Success Response Captured.')
-    else:
-        print('Failed Response Captured')
+    now = datetime.now()
+    file_name = f'logs/log_{now.strftime('%Y-%m-%d')}'
+    date_time = now.strftime('%Y-%m-%d %I:%M:%S')
+    result = f"[{date_time}]\n"
 
-    print(f'Time Finished: (seconds) seconds\n')
+    if not response['errors']:
+        result += f"\tDemographic Authentication Success Response Captured\n"
+        result += f"\tResponse: {response}\n\n"
+    else:
+        result += f"\tDemographic Authentication Failed Response Captured\n"
+        result += f"\tResponse: {response['errors']['errorCode']} - {response['errors']['errorMessage']}\n"
+
+    result += f'\tTime Finished: { format(seconds, '.2f') } seconds\n\n'
+
+    print(f"Authentication request has been initiated. as of {date_time}\n")
+
+    if not os.path.isdir('logs'):
+        os.makedirs('logs')
+
+    if not os.path.isfile(file_name):
+        with open(file_name, 'x') as file:
+            file.write(result)
+    else:
+        with open(file_name, 'a') as file:
+            file.write(result)
 
     # sleep
-    time.sleep(5)
+    time.sleep(3600)
 
     # recursion
     authenticate()
