@@ -12,7 +12,7 @@ def initiate_authentication():
 def authenticate(type = "basic"):
     authentication_request_body = {}
 
-    authentication_request_body['individual_id'] = "5872130947327698"
+    authentication_request_body['individual_id'] = "2381594586391690"
     authentication_request_body['individual_id_type'] = "VID"
     authentication_request_body['input_bio'] = "off"
     authentication_request_body['input_otp'] = "off"
@@ -26,7 +26,7 @@ def authenticate(type = "basic"):
     now = datetime.now()
     start_time = time.time()
 
-    response = requests.get(authentication_url, params=authentication_request_body)
+    response = requests.post(authentication_url, data=authentication_request_body)
     response = response.json()
     
     stop_time = time.time()
